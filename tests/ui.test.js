@@ -10,6 +10,8 @@ const tabStops = (boardId) => cells(boardId).filter((el) => el.tabIndex >= 0).le
 const phaseOver = () => !document.getElementById('game-over').hidden;
 
 beforeAll(async () => {
+  let seed = 7;
+  vi.spyOn(Math, 'random').mockImplementation(() => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646);
   document.body.innerHTML = html.match(/<body>([\s\S]*)<\/body>/)[1].replace(/<script[\s\S]*?<\/script>/g, '');
   vi.useFakeTimers();
   await import('../js/ui.js');
@@ -35,7 +37,7 @@ describe('keyboard play', () => {
     expect(tabStops('computer-board')).toBe(100);
   });
 
-  it('focuses Play Again when the game ends, and Rotate after it is pressed', () => {
+  it('focuses Play Again at game over, labels revealed ships, then focuses Rotate after Play Again', () => {
     for (const cell of cells('computer-board')) {
       if (phaseOver()) break;
       cell.click();
@@ -44,6 +46,10 @@ describe('keyboard play', () => {
     expect(phaseOver()).toBe(true);
     expect(document.activeElement).toBe(document.getElementById('play-again-btn'));
     expect(tabStops('computer-board')).toBe(0);
+
+    const revealed = document.querySelectorAll('#computer-board .cell.revealed');
+    expect(revealed.length).toBeGreaterThan(0);
+    for (const el of revealed) expect(el.getAttribute('aria-label')).toMatch(/: ship$/);
 
     document.getElementById('play-again-btn').click();
     expect(document.activeElement).toBe(document.getElementById('rotate-btn'));

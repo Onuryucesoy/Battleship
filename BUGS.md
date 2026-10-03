@@ -1,6 +1,6 @@
 # Bugs found during development
 
-Only bugs that actually happened are listed here. The game-logic unit tests and the AI-vs-AI simulation (1,000 games by default, plus a 10,000-game run) passed on their first run and found no bugs. All three bugs below came from playtesting in the browser. A deliberate edge-case pass found nothing else: rapid clicks and clicks during the computer's turn, enemy-board clicks during placement and after game over, repeat shots, Randomize after manual placement, every edge and corner in both orientations, repeated Play Again, and resizing mid-game.
+Only bugs that actually happened are listed here. The game-logic unit tests and the AI-vs-AI simulation (1,000 games by default, plus a 10,000-game run) passed on their first run and found no bugs. All four bugs below came from playtesting in the browser. A deliberate edge-case pass found nothing else: rapid clicks and clicks during the computer's turn, enemy-board clicks during placement and after game over, repeat shots, Randomize after manual placement, every edge and corner in both orientations, repeated Play Again, and resizing mid-game.
 
 ## 1. Hovered cell lost its placement preview colour
 
@@ -22,3 +22,10 @@ Only bugs that actually happened are listed here. The game-logic unit tests and 
 - **How it was found:** Playtest (keyboard-only).
 - **Root cause:** Every cell was always a focusable `<button>`, and nothing moved focus when the controls under it were hidden.
 - **Fix:** In `render()` only the active board's cells are focusable (`tabIndex` 0, the inactive board gets -1). Focus now moves to enemy A1 on Start, to Play Again when the game ends, and to Rotate after Play Again. Tests: three cases in `tests/ui.test.js`.
+
+## 4. Revealed enemy ships were still announced as "water"
+
+- **What went wrong:** At game over the remaining enemy ships were shown in grey, but screen readers still read those cells as water (for example "Enemy board F9: water").
+- **How it was found:** Playtest (recorded end-to-end run, checking accessible labels).
+- **Root cause:** `renderBoard` builds the enemy labels with ships hidden. The game-over reveal added the `revealed` class afterwards but never updated `aria-label`.
+- **Fix:** The reveal loop in `render()` now also sets the label to `ship`. Test: the game-over case in `tests/ui.test.js` checks every revealed cell's label.

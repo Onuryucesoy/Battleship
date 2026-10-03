@@ -124,7 +124,9 @@ function render() {
   if (over) {
     for (const ship of game.computerBoard.ships) {
       for (const [r, c] of ship.cells) {
-        if (!game.computerBoard.hasBeenShot(r, c)) computerCells[r][c].classList.add('revealed');
+        if (game.computerBoard.hasBeenShot(r, c)) continue;
+        computerCells[r][c].classList.add('revealed');
+        computerCells[r][c].setAttribute('aria-label', `Enemy board ${coordName(r, c)}: ship`);
       }
     }
   }
