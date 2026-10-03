@@ -10,6 +10,7 @@
     "start": "python3 -m http.server 8000"
   },
   "devDependencies": {
+    "jsdom": "^26.1.0",
     "vitest": "^3.2.7"
   }
 }

@@ -17,6 +17,8 @@ Classic Battleship in the browser against a computer opponent. Plain HTML, CSS a
    - The computer's last shot is outlined in yellow on your board.
 4. Sink all five enemy ships to win. When the game ends the remaining enemy ships are revealed, and **Play Again** fully resets the game.
 
+**Keyboard:** everything works with `Tab` and `Enter`. While placing, a focused cell shows the same preview as hovering. After **Start Game**, focus jumps to the enemy board, and only the board you can act on is in the tab order.
+
 ### Computer opponent
 
 The AI uses hunt and target. It fires at random untried cells until it scores a hit, then probes the neighbouring cells, follows the line once two hits line up, and returns to hunting after the ship sinks. If it hits another ship along the way, it finishes that one too before hunting again. It never fires at the same cell twice.
@@ -43,7 +45,7 @@ Requires Node.js 18+.
 
 ```bash
 npm install
-npm test            # Vitest unit tests (tests/game.test.js)
+npm test            # Vitest unit tests (tests/game.test.js, tests/ui.test.js)
 npm run simulate    # 1,000 full AI-vs-AI games
 ```
 
@@ -57,6 +59,7 @@ npm run simulate    # 1,000 full AI-vs-AI games
 | `css/style.css` | Styles |
 | `js/game.js` | Game logic: `Board`, `Ship`, `HuntTargetAI`, `Game` (no DOM) |
 | `js/ui.js` | DOM rendering and event handling |
-| `tests/game.test.js` | Unit tests |
+| `tests/game.test.js` | Unit tests for the game logic and AI |
+| `tests/ui.test.js` | UI tests in jsdom (keyboard focus and preview) |
 | `scripts/simulate.js` | AI-vs-AI simulation |
 | `BUGS.md` | Bugs found during development |

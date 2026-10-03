@@ -142,6 +142,15 @@ function render() {
     playerCells[lastComputerShot[0]][lastComputerShot[1]].classList.add('last-shot');
   }
 
+  const playerTab = placing ? 0 : -1;
+  const enemyTab = game.phase === 'battle' ? 0 : -1;
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      playerCells[r][c].tabIndex = playerTab;
+      computerCells[r][c].tabIndex = enemyTab;
+    }
+  }
+
   els.playerBoard.classList.toggle('placing', placing);
   els.computerBoard.classList.toggle(
     'clickable',
@@ -206,6 +215,7 @@ function computerTurn(expectedRound) {
   const message = describeShot(shot, false, shot.row, shot.col);
   setStatus(game.phase === 'over' ? message : `${message} Your turn.`);
   render();
+  if (game.phase === 'over') els.playAgainBtn.focus();
 }
 
 els.playerBoard.addEventListener('click', (event) => {
@@ -232,6 +242,19 @@ els.playerBoard.addEventListener('mouseleave', () => {
   render();
 });
 
+els.playerBoard.addEventListener('focusin', (event) => {
+  const pos = cellFromEvent(event);
+  if (!pos || game.phase !== 'placement') return;
+  hoverCell = pos;
+  render();
+});
+
+els.playerBoard.addEventListener('focusout', (event) => {
+  if (els.playerBoard.contains(event.relatedTarget)) return;
+  hoverCell = null;
+  render();
+});
+
 els.computerBoard.addEventListener('click', (event) => {
   const pos = cellFromEvent(event);
   if (!pos || game.phase !== 'battle' || game.turn !== 'player') return;
@@ -249,6 +272,7 @@ els.computerBoard.addEventListener('click', (event) => {
     setStatus(message);
   }
   render();
+  if (game.phase === 'over') els.playAgainBtn.focus();
 });
 
 function rotate() {
@@ -280,8 +304,12 @@ els.startBtn.addEventListener('click', () => {
   hoverCell = null;
   setStatus('Battle stations! Fire at a cell on the enemy board.');
   render();
+  computerCells[0][0].focus();
 });
 
-els.playAgainBtn.addEventListener('click', newGame);
+els.playAgainBtn.addEventListener('click', () => {
+  newGame();
+  els.rotateBtn.focus();
+});
 
 newGame();
