@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Battleship</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Battleship</h1>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </header>
+
+    <section id="placement-controls" class="controls" aria-label="Ship placement">
+      <button id="rotate-btn" type="button">Rotate: Horizontal</button>
+      <button id="randomize-btn" type="button">Randomize</button>
+      <button id="clear-btn" type="button">Clear</button>
+      <button id="start-btn" type="button" class="primary" disabled>Start Game</button>
+    </section>
+
+    <section id="game-over" class="game-over" hidden>
+      <h2 id="winner-text"></h2>
+      <button id="play-again-btn" type="button" class="primary">Play Again</button>
+    </section>
+
+    <main class="boards">
+      <section class="board-wrap">
+        <h2>Your Fleet</h2>
+        <div id="player-board" class="board" role="grid" aria-label="Your board"></div>
+        <ul id="player-fleet" class="fleet" aria-label="Your ships"></ul>
+      </section>
+      <section class="board-wrap">
+        <h2>Enemy Waters</h2>
+        <div id="computer-board" class="board enemy" role="grid" aria-label="Enemy board"></div>
+        <ul id="computer-fleet" class="fleet" aria-label="Enemy ships"></ul>
+      </section>
+    </main>
+
+    <ul class="legend" aria-label="Legend">
+      <li><span class="swatch ship"></span>Ship</li>
+      <li><span class="swatch miss"></span>Miss</li>
+      <li><span class="swatch hit"></span>Hit</li>
+      <li><span class="swatch sunk"></span>Sunk</li>
+    </ul>
+
+    <script type="module" src="js/ui.js"></script>
+  </body>
+</html>
