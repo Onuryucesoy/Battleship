@@ -1,7 +1,7 @@
 {
   "name": "battleship",
   "version": "1.0.0",
-  "description": "Browser Battleship against a hunt-and-target computer opponent.",
+  "description": "Browser Battleship against a probability-targeting computer opponent.",
   "private": true,
   "type": "module",
   "scripts": {
