@@ -71,9 +71,12 @@ Requires Node.js 18+.
 npm install
 npm test            # Vitest: rules, AI, game flow and jsdom UI tests
 npm run simulate    # 1,000 games per AI plus head to head
+npm run ab          # 1,000 full games, Player A vs Player B, rules checked every shot
 ```
 
 `npm run simulate -- <games> <seed>` changes the number of games or the seed, e.g. `npm run simulate -- 5000 42`. The script exits non-zero if any AI repeats a square, fires off the board or a game fails to end.
+
+`npm run ab -- <games> <seed>` plays full games through the real `Game` engine. Player A sits in your seat and moves first; Player B is the computer, and both use `ProbabilityAI`. Every shot is checked: valid fleets, strict alternation, no repeat or off-board shots, correct hit/miss/sunk results, game over exactly when a fleet is gone, and no shots after it. It prints each player's win ratio and exits non-zero if any game fails a check. With seed 2026, A won 494 and B won 506 of 1,000 games (49.4% / 50.6%) with 0 failures, so moving first gives no meaningful edge.
 
 ## Project layout
 
@@ -88,4 +91,5 @@ npm run simulate    # 1,000 games per AI plus head to head
 | `js/main.js` | Entry point |
 | `tests/` | Vitest tests: `rules`, `ai`, `game`, and `ui` (jsdom edge cases) |
 | `scripts/simulate.js` | AI simulation and benchmark |
+| `scripts/ab-test.js` | Player A vs Player B full-game rules check |
 | `BUGS.md` | Bugs found during development |
