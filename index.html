@@ -3,47 +3,83 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Battleship</title>
+    <meta name="description" content="Play Battleship in your browser against a computer that plays to win." />
+    <title>Battleship vs Computer</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%E2%9A%93%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
-    <header>
+  <body class="phase-placement">
+    <header class="top">
       <h1>Battleship</h1>
-      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="tagline">You against the computer. Sink all five enemy ships before it sinks yours.</p>
     </header>
 
-    <section id="placement-controls" class="controls" aria-label="Ship placement">
-      <button id="rotate-btn" type="button">Rotate: Horizontal</button>
-      <button id="randomize-btn" type="button">Randomize</button>
-      <button id="clear-btn" type="button">Clear</button>
-      <button id="start-btn" type="button" class="primary" disabled>Start Game</button>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <section id="placement-panel" class="panel" aria-label="Place your ships">
+      <div class="tray-wrap">
+        <h2 class="panel-title">1. Pick a ship, then click your board to place it</h2>
+        <div id="ship-tray" class="ship-tray"></div>
+      </div>
+      <div class="actions">
+        <button id="rotate-btn" type="button" class="btn"></button>
+        <button id="randomize-btn" type="button" class="btn">Randomize</button>
+        <button id="clear-btn" type="button" class="btn">Clear</button>
+        <button id="start-btn" type="button" class="btn primary" disabled>Start battle</button>
+      </div>
     </section>
 
-    <section id="game-over" class="game-over" hidden>
-      <h2 id="winner-text"></h2>
-      <button id="play-again-btn" type="button" class="primary">Play Again</button>
+    <section id="battle-panel" class="panel battle-panel" aria-label="Battle" hidden>
+      <p class="panel-title">Click a square in <strong>Enemy waters</strong> to fire. You and the computer take turns, one shot each.</p>
+      <button id="new-game-btn" type="button" class="btn">New game</button>
+    </section>
+
+    <section id="game-over" class="game-over" aria-labelledby="result-title" hidden>
+      <h2 id="result-title"></h2>
+      <p id="result-detail"></p>
+      <button id="play-again-btn" type="button" class="btn primary">Play again</button>
     </section>
 
     <main class="boards">
-      <section class="board-wrap">
-        <h2>Your Fleet</h2>
-        <div id="player-board" class="board" role="grid" aria-label="Your board"></div>
+      <section class="board-wrap" id="player-side">
+        <h2>Your fleet</h2>
+        <div id="player-board" class="board" role="group" aria-label="Your board"></div>
         <ul id="player-fleet" class="fleet" aria-label="Your ships"></ul>
       </section>
-      <section class="board-wrap">
-        <h2>Enemy Waters</h2>
-        <div id="computer-board" class="board enemy" role="grid" aria-label="Enemy board"></div>
+      <section class="board-wrap" id="enemy-side">
+        <h2>Enemy waters</h2>
+        <div id="computer-board" class="board enemy" role="group" aria-label="Enemy board"></div>
         <ul id="computer-fleet" class="fleet" aria-label="Enemy ships"></ul>
       </section>
     </main>
 
-    <ul class="legend" aria-label="Legend">
-      <li><span class="swatch ship"></span>Ship</li>
-      <li><span class="swatch miss"></span>Miss</li>
-      <li><span class="swatch hit"></span>Hit</li>
-      <li><span class="swatch sunk"></span>Sunk</li>
-    </ul>
+    <section class="info">
+      <ul class="legend" aria-label="Legend">
+        <li><span class="swatch ship"></span>Your ship</li>
+        <li><span class="swatch miss">•</span>Miss</li>
+        <li><span class="swatch hit">✕</span>Hit</li>
+        <li><span class="swatch sunk">☠</span>Sunk ship</li>
+        <li><span class="swatch last"></span>Latest shot</li>
+      </ul>
+      <div class="log-wrap">
+        <h2>Battle log</h2>
+        <ol id="log" class="log" aria-label="Battle log"></ol>
+      </div>
+    </section>
 
-    <script type="module" src="js/ui.js"></script>
+    <details class="help">
+      <summary>How to play</summary>
+      <ul>
+        <li>Each side has five ships: Carrier (5 squares), Battleship (4), Cruiser (3), Submarine (3) and Destroyer (2).</li>
+        <li>Ships can't overlap or hang off the edge of the 10 × 10 board.</li>
+        <li>Pick a ship, use <strong>Rotate</strong> (or press <kbd>R</kbd>) to switch between horizontal and vertical, and click your board to place it. To move a placed ship, pick it again in the ship tray. <strong>Randomize</strong> places the whole fleet for you.</li>
+        <li>Turns alternate: one shot each, even after a hit.</li>
+        <li>A hit shows ✕. When every square of a ship is hit, the whole ship is marked ☠ as sunk.</li>
+        <li>The first side to sink all five enemy ships wins.</li>
+        <li>Keyboard: <kbd>Tab</kbd> to a board, arrow keys to move, <kbd>Enter</kbd> to place or fire.</li>
+      </ul>
+    </details>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
