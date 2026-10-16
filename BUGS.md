@@ -22,3 +22,10 @@ Only bugs that actually happened while building this version are listed.
 - **How found:** the first simulation run.
 - **Root cause:** `ProbabilityAI.heatMap()` built string keys for every square of every candidate placement, on every shot.
 - **Fix:** it now builds one typed-array snapshot of the board per shot and indexes it by number. Same choices, same results, and the run takes about 5 seconds.
+
+## 4. Clicking a placed ship removed it while placing another ship
+
+- **Symptom:** with a ship selected, clicking a square that already held a ship took that placed ship off the board instead of refusing the new ship.
+- **How found:** reported by the user while play-testing.
+- **Root cause:** a click on an occupied square was treated as "pick this ship up", which wins over placing the selected ship.
+- **Fix:** board clicks on an occupied square are now always refused with a "Ships can't overlap" message. Ships are moved only by picking them in the ship tray. Covered by `tests/ui.test.js`.

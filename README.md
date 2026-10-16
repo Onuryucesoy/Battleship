@@ -19,7 +19,8 @@ Classic Battleship in the browser, you against a computer that plays to win. Pla
    - Hover over a square to preview: green fits, red doesn't.
    - **Rotate** (or press `R`) switches between horizontal and vertical.
    - **Randomize** places the whole fleet for you, following the same rules. Press it again for a new layout.
-   - Click a placed ship (on the board or in the tray) to pick it up and move it. **Clear** removes every ship.
+   - Squares that already hold a ship are refused, so a new ship can never replace or overlap one you placed.
+   - To move a placed ship, pick it in the tray: it comes off the board and you place it again. **Clear** removes every ship.
 2. Press **Start battle**.
 3. **Fire** by clicking a square in *Enemy waters*. The computer answers with one shot after a short pause. Its latest shot is outlined in yellow on your board.
 4. When the game ends, the computer's remaining ships are shown with dashed outlines. **Play again** starts a new game. **New game** abandons the current one.

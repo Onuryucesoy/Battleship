@@ -138,25 +138,22 @@ export function createApp({ doc = document, rng = Math.random, computerDelay = 7
     if (def) {
       return `Place your ${def.name} (${def.length} squares, ${ui.horizontal ? 'horizontal' : 'vertical'}).`;
     }
-    if (game.allShipsPlaced) return 'Fleet ready! Press Start battle, or click a ship to move it.';
+    if (game.allShipsPlaced) return 'Fleet ready! Press Start battle, or pick a ship in the tray to move it.';
     return 'Pick a ship to place.';
   }
 
   function onPlayerCell(r, c) {
     if (game.phase !== 'placement') return;
-    const existing = game.playerBoard.shipAt(r, c);
-    if (existing) {
-      game.removePlayerShip(existing.id);
-      ui.selectedId = existing.id;
-      ui.horizontal = existing.horizontal;
-      ui.hover = [r, c];
-      setStatus(`Picked up your ${existing.name}. ${placementStatus()}`);
-      render();
-      return;
-    }
     const def = selectedDef();
     if (!def) {
       setStatus(placementStatus());
+      return;
+    }
+    const existing = game.playerBoard.shipAt(r, c);
+    if (existing) {
+      setStatus(
+        `${coordName(r, c)} already has your ${existing.name}. Ships can't overlap. To move a ship, pick it in the ship tray.`,
+      );
       return;
     }
     if (!game.placePlayerShip(def.id, r, c, ui.horizontal)) {

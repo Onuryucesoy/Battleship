@@ -97,14 +97,30 @@ describe('placement', () => {
     expect(doc.querySelectorAll('#player-board .preview-bad')).toHaveLength(4);
   });
 
-  it('picks a placed ship back up when it is clicked', () => {
+  it('refuses to place a ship on a square that already has a ship, keeping the placed one', () => {
     setup();
-    click(cell('player', 0, 0));
-    click(cell('player', 0, 3));
-    expect(app.game.playerBoard.getShip('carrier')).toBeNull();
-    expect(app.ui.selectedId).toBe('carrier');
-    click(cell('player', 5, 5));
-    expect(app.game.playerBoard.getShip('carrier').cells[0]).toEqual([5, 5]);
+    click(cell('player', 0, 0)); // carrier A1-E1
+    const carrier = JSON.stringify(app.game.playerBoard.getShip('carrier').cells);
+    for (let c = 0; c < 5; c++) {
+      hover(cell('player', 0, c));
+      expect(cell('player', 0, c).classList.contains('preview-bad')).toBe(true);
+      click(cell('player', 0, c));
+      expect(JSON.stringify(app.game.playerBoard.getShip('carrier').cells)).toBe(carrier);
+      expect(app.game.playerBoard.getShip('battleship')).toBeNull();
+      expect(app.ui.selectedId).toBe('battleship');
+    }
+    expect(status()).toMatch(/E1 already has your Carrier/);
+    click($('rotate-btn'));
+    click(cell('player', 0, 2)); // vertical battleship starting on the carrier
+    expect(app.game.playerBoard.ships.map((s) => s.id)).toEqual(['carrier']);
+  });
+
+  it('leaves placed ships alone when the board is clicked with nothing selected', () => {
+    setup();
+    click($('randomize-btn'));
+    const layout = JSON.stringify(app.game.playerBoard.ships.map((s) => s.cells));
+    click(cell('player', ...app.game.playerBoard.ships[0].cells[0]));
+    expect(JSON.stringify(app.game.playerBoard.ships.map((s) => s.cells))).toBe(layout);
   });
 
   it('lets you choose any ship from the tray, including a placed one', () => {
