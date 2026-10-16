@@ -72,6 +72,7 @@ npm install
 npm test            # Vitest: rules, AI, game flow and jsdom UI tests
 npm run simulate    # 1,000 games per AI plus head to head
 npm run ab          # 1,000 full games, Player A vs Player B, rules checked every shot
+npm run fuzz        # 1,000 games of random commands on the real game screen (jsdom), checked after every action
 ```
 
 `npm run simulate -- <games> <seed>` changes the number of games or the seed, e.g. `npm run simulate -- 5000 42`. The script exits non-zero if any AI repeats a square, fires off the board or a game fails to end.
@@ -92,4 +93,5 @@ npm run ab          # 1,000 full games, Player A vs Player B, rules checked ever
 | `tests/` | Vitest tests: `rules`, `ai`, `game`, and `ui` (jsdom edge cases) |
 | `scripts/simulate.js` | AI simulation and benchmark |
 | `scripts/ab-test.js` | Player A vs Player B full-game rules check |
+| `scripts/fuzz.js` | Random-command fuzz test of the full game screen |
 | `BUGS.md` | Bugs found during development |

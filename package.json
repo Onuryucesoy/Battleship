@@ -8,6 +8,7 @@
     "test": "vitest run",
     "simulate": "node scripts/simulate.js",
     "ab": "node scripts/ab-test.js",
+    "fuzz": "node scripts/fuzz.js",
     "start": "python3 -m http.server 8000"
   },
   "devDependencies": {
